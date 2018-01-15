@@ -60,11 +60,15 @@ Both Cox's and Aalen's models are based on a survival function non-parametric ba
 
 DeepTTF consists in using the raw time-series of the covariates and static attributes as input features and predicting as output the parameters alpha and beta that characterize the Weibull distribution of the future time-to-failure (TTF).
 
+![img](https://github.com/ragulpr/wtte-rnn/raw/master/readme_figs/fig_rnn_weibull.png)
+
+Source: https://github.com/ragulpr/wtte-rnn/raw/master/readme_figs/fig_rnn_weibull.png
+
 Using the word time-series is not 100% appropriate because RNN are sequential model, thus they work in discrete time steps and not in a continuous timespace. This implies that all of the time-series should be binned in time intervals representing the resolution of the time.
 All of the signals should then be syncronized in time and no gaps are not allowed. In order to filter the noise you can also choose to increase the time interval of each step and extract the mean or median instead of the raw values.
 In our example the variable t represent time steps and not the actual time in the definition of a time-series.
 
-You can read more about the theory and intuitions behind the Weibul time-to-event RNN at https://github.com/ragulpr/wtte-rnn or in his presentation at the ML Jeju Camp 2017: https://docs.google.com/presentation/d/1H_TK9eQCMGTcslc4AnMCNTUskWIYcJAxsV18ac-fIqM/edit#slide=id.g1fa2ecfbc0_0_38.
+You can read more about the theory and intuitions behind the Weibul time-to-event RNN following the documentation of [wtte-rnn](https://github.com/ragulpr/wtte-rnn) or in his presentation at the [ML Jeju Camp 2017](https://docs.google.com/presentation/d/1H_TK9eQCMGTcslc4AnMCNTUskWIYcJAxsV18ac-fIqM/edit#slide=id.g1fa2ecfbc0_0_38).
 
 # Examples
 
