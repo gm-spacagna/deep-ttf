@@ -24,7 +24,7 @@ The notebook examples were developed in Python 3.5.
 
 ## Survival analysis
 
-The techniques described in this tutorial are based on the Servival analysis theory and applications. Survival analysis is the study of expected duration of time until one or more events happen, in our case failure in mechanical systems.
+The techniques described in this tutorial are based on the survival analysis theory and applications. Survival analysis is the study of expected duration of time until one or more events happen, in our case failure in mechanical systems.
 
 Survival analysis differs from traditional regression problems because the data can be partially observed, or censored. That is, we observe a phenomenon up to a point in time where we stop collecting data either because the failure event happens and is registered (uncensored) or because it was not possible to collect data furtherly (censored) due to technical issues or because of the failure is not happened yet at current time. We are not considering the case where data is left-censored. We assume we can always observe the beginning of the signal or events sequence.
 
