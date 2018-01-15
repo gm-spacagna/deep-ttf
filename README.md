@@ -68,3 +68,6 @@ DeepTTF consists in using the raw time-series of the covariates and static attri
 You can read more about the theory and intuitions behind the Weibul time-to-event RNN at https://github.com/ragulpr/wtte-rnn or in his presentation at the ML Jeju Camp 2017: https://docs.google.com/presentation/d/1H_TK9eQCMGTcslc4AnMCNTUskWIYcJAxsV18ac-fIqM/edit#slide=id.g1fa2ecfbc0_0_38.
 
 
+# Related work
+
+DeepSurv: https://www.researchgate.net/publication/303812000_Deep_Survival_A_Deep_Cox_Proportional_Hazards_Network
