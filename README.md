@@ -155,12 +155,12 @@ or even more evident using a kernel-density estimation:
 The distribution of residual error will look like:
 ![img](images/regression_error_test.png)
 
-It is like a GLM (Generalized Linear Model) regression where the residual belong to a family of non Normal distributions.
+It looks like the result of a GLM (Generalized Linear Model) regression where the residuals belong to a family of non Normal distributions.
 The nice result is that the residual error has almost zero mean, aka. unbiased predictions. 
 
 Nevertheless, treating the Weibull distribution as a single prediction means losing all of its probabilistic charme. Thus, it is more advisable to reason about your time-to-failure in probabilistic terms or at least to provide some confidence intervals.
 
-If we pick the engine number 3 we can see the evolution of the predicted time-to-failure distribution at each time step (blu is the begin and red is the end of the sequence):
+If, instead, we pick the engine number 3 from the test set and predict all of its sub-sequences, we can see the evolution of the predicted time-to-failure distributions at each time step (blu is the beginning and red is the end of the sequence):
 
 ![img](images/weibull-distribution-test-engine-3.png)
 
