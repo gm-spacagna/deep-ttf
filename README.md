@@ -18,9 +18,13 @@ The approach can be used to predict failures of any component in many other appl
 # References
 
 Lifelines documentation: http://lifelines.readthedocs.io/en/latest/index.html
+
 Data source original: https://c3.nasa.gov/dashlink/resources/139/
+
 Data source tutorial: https://github.com/daynebatten/keras-wtte-rnn/blob/master/data_readme.txt
+
 [wtte-rnn](https://github.com/ragulpr/wtte-rnn)
+
 [keras-wtte-rnn](https://github.com/daynebatten/keras-wtte-rnn)
 
 # Installation
