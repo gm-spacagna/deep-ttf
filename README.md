@@ -1,4 +1,4 @@
-# deep-ttf
+# Deep Time-to-Failure
 Predicting survival functions and remaining time-to-failure using statistical techniques and Recurrent Neural Networks in Python.
 
 The tutorial is divided into:
