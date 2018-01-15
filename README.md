@@ -44,7 +44,11 @@ The survival model is then characterized by either its \b{survival function S(t)
 
 From the survival function we can derive the distribution of future lifetime, which is the time remaining until death given survival up to current time.
 
-In literature we often find two main non-parametric estimators for fitting survival distributions such as the Kaplan-Maier and Nelson-Aaler.
+### Non-parametric distributions
+
+In literature we often find two main non-parametric estimators for fitting survival distributions. They are the Kaplan-Maier and Nelson-Aaler estimators.
+
+### Weibull distribution
 
 The Weibull distribution is used instead for modeling a parametric distribution that well represent the future life time in many real-word use cases.
 The Weibull distribution is defined as by parameters alpha and beta as such:
@@ -57,11 +61,14 @@ The parameter alpha is a multipler of where the expected value and mode of the d
 
 ## Survival regression
 
+### Statistical regression techniques
 Fitting a distribution can be worth in case that we want to compare different populations, e.g. in clinic tests, and decide whether there is a statistical signficance between the different survival curves. In order to predict the time-to-failure we want to use different features as regressors and predict as output the survival function, or related functions, of each individual.
 
 For static attributes or hand-crafted features (e.g. lags, accumulated statistics, aggregated statistics) we can use the [Cox's Proportional Hazard model](https://en.wikipedia.org/wiki/Survival_analysis#Cox_proportional_hazards_(PH)_regression_analysis) or [Aalen's Additive model] (http://lifelines.readthedocs.io/en/latest/Survival%20Regression.html#aalen-s-additive-model).
 
 Both Cox's and Aalen's models are based on a survival function non-parametric baseline which is multiplied by another function which is a combination of the input features. Both of them do a good job on describing the variables that impact the survival of a given individual. Nevertheless, they are limited in type of input data can handle and suffer from low generalization and high computational cost due to the high degree of freedom due to the non-parametric nature of the problem.
+
+### Timeseries and Recurrent Neural Networks
 
 DeepTTF consists in using the raw time-series of the covariates and static attributes as input features and predicting as output the parameters alpha and beta that characterize the Weibull distribution of the future time-to-failure (TTF).
 
