@@ -28,7 +28,7 @@ The techniques described in this tutorial are based on the survival analysis the
 
 Survival analysis differs from traditional regression problems because the data can be partially observed, or censored. That is, we observe a phenomenon up to a point in time where we stop collecting data either because the failure event happens and is registered (uncensored) or because it was not possible to collect data furtherly (censored) due to technical issues or because of the failure is not happened yet at current time. We are not considering the case where data is left-censored. We assume we can always observe the beginning of the signal or events sequence.
 
-The survival model is then characterized by either its **survival function S(t)}** defined as the probability that a subject survives longer than time t; or by its **cumulative hazard function H(t)** which is the accumulation of hazard over time and defined by the integral between 0 and t of the probability of failing instantly at time x given that it survived up to x.
+The survival model is then characterized by either its **survival function S(t)** defined as the probability that a subject survives longer than time t; or by its **cumulative hazard function H(t)** which is the accumulation of hazard over time and defined by the integral between 0 and t of the probability of failing instantly at time x given that it survived up to x.
 
 From the survival function we can derive the distribution of **time-to-failure** or future lifetime, which is the time remaining until death given survival up to current time.
 
@@ -45,7 +45,7 @@ The Weibull distribution is defined as by parameters alpha and beta as such:
 
 ![img](http://latex.codecogs.com/gif.latex?p%28t%29%3D%20e%20%5E%7B-%5Cleft%20%28%5Cfrac%7Bt%7D%7B%5Calpha%7D%20%5Cright%29%5E%7B%5Cbeta%7D%7D%20-%20e%20%5E%7B-%5Cleft%20%28%5Cfrac%7Bt%20&plus;%201%7D%7B%5Calpha%7D%20%5Cright%29%5E%7B%5Cbeta%7D%7D) for the discrete form.
 
-The parameter alpha is a multipler of where the expected value and mode of the distribution is positioned in time while the beta parameter is an indicator of the variance or confidence of our predictions.
+The parameter alpha is an indicator of where the expected value and mode of the distribution is positioned in time while the beta parameter is an indicator of the variance of our prediction (the larger the less confident).
 
 ## Survival regression
 
@@ -54,19 +54,19 @@ Fitting a distribution can be worth in case that we want to compare different po
 
 For static attributes or hand-crafted features (e.g. lags, accumulated statistics, aggregated statistics) we can use the **[Cox's Proportional Hazard model](https://en.wikipedia.org/wiki/Survival_analysis#Cox_proportional_hazards_(PH)_regression_analysis)** or **[Aalen's Additive model](http://lifelines.readthedocs.io/en/latest/Survival%20Regression.html#aalen-s-additive-model)**.
 
-Both Cox's and Aalen's models are based on a survival function non-parametric baseline which is multiplied by another function which is a combination of the input features. Both of them do a good job on describing the variables that impact the survival of a given individual. Nevertheless, they are limited in type of input data can handle and suffer from low generalization and high computational cost due to the high degree of freedom due to the non-parametric nature of the problem.
+Both Cox's and Aalen's models are based on a non-parametric baseline of the survival function which is multiplied by another function which is a combination of the input features. Both of them do a good job on describing the variables that impact the survival of a given individual. Nevertheless, they are limited in the type of input data that can handle and suffer from low generalization due to the high degree of freedom of the non-parametric nature of the model.
 
 ### Timeseries and Recurrent Neural Networks
 
-DeepTTF consists in using the raw time-series of the covariates and static attributes as input features and predicting as output the parameters alpha and beta that characterize the Weibull distribution of the future time-to-failure (TTF).
+DeepTTF leverages raw time-series of the covariates in addition to static attributes as input features in order to predict as output the parameters alpha and beta that characterize the Weibull distribution of the future time-to-failure (T) at any sequent point.
 
 ![img](https://github.com/ragulpr/wtte-rnn/raw/master/readme_figs/fig_rnn_weibull.png)
 
 Source: https://github.com/ragulpr/wtte-rnn/raw/master/readme_figs/fig_rnn_weibull.png
 
-Using the word time-series is not 100% appropriate because RNN are sequential model, thus they work in discrete time steps and not in a continuous timespace. This implies that all of the time-series should be binned in time intervals representing the resolution of the time.
-All of the signals should then be syncronized in time and no gaps are not allowed. In order to filter the noise you can also choose to increase the time interval of each step and extract the mean or median instead of the raw values.
-In our example the variable t represent time steps and not the actual time in the definition of a time-series.
+Using the word 'time-series' is not 100% appropriate because RNNs are sequential models. Thus, they work in discrete time steps and not in a continuous timespace. This implies that all of the time-series should be binned in time intervals representing the resolution of time.
+All of the signals should then be syncronized in time and no gaps are allowed. In order to filter the noise you can also choose to increase the time interval of each step and extract the mean or median instead of the raw values.
+In our examples, variable t represents time steps and not the actual time in the proper definition of a time-series.
 
 You can read more about the theory and intuitions behind the Weibul time-to-event RNN following the documentation of [wtte-rnn](https://github.com/ragulpr/wtte-rnn) or in his presentation at the [ML Jeju Camp 2017](https://docs.google.com/presentation/d/1H_TK9eQCMGTcslc4AnMCNTUskWIYcJAxsV18ac-fIqM/edit#slide=id.g1fa2ecfbc0_0_38).
 
@@ -74,26 +74,46 @@ You can read more about the theory and intuitions behind the Weibul time-to-even
 
 ## Survival analysis and regression using lifelines
 
-The notebook with example will be published soon.
+The notebook with examples of how to leverage lifelines for fitting a survival function or a survival regression will be published soon.
 
 ## Time-to-failure using Weibull and Recurrent Neural Networks in keras
+In this example we took sequences of a bunch of parameters for 100 jet engines in order to predict when each engine failed.
 
-In this example we take one hundred jet engines containing 17 time-series of relevant features removing constant features across the whole dataset.
-Each engine has a different sequence length, thus we fixed a look-back period of 100 and use the Masking layer in Keras for handling the different sequence lengths.
+### Data preparation
+
+Among all of the available parameters and settings we selected 17 time-series of relevant features.
+The data preparation consisted in removing constant features and normalizing between -1 and 1 the min and max of each variable.
+
+Since each engine has a variable sequence length, we fixed a look-back period of 100 steps and used the Masking layer in Keras for handling the different sequence lengths. Ideally we should select a look-back period equal to the number of steps required for achieving a stationary process. That is, a process whose outcome depends only from the last N observations and is independent from everything that happened before. This assumption is generally held in case of component failures that works as new for a long period and suddenly start decaying. In the latter scenario the decaying period corresponds to the lock-back period. If we also want to capture aging effects that are relevant since day 1, we should then use as look-back period the maximum sequence length possible in the dataset and assuming that no any component can last longer than that.
+Pay attention that keras does not support a mask_value=np.nan hence we had to choose a magic number of -99 which is a safe choice since our input space is confined between -1 and 1.
 
 The samples in the traning data are each subsequence between 0 and t with t ranging from 1 up to the latest observation of each engine.
 The last observation corresponds to the step preceding the failure event.
-In other words, we try to predict the reamaining time-to-failure (T) of training engines from each possible timestep until the last one where the time-to-failure is 1. The target variable is a countdown function of time.
+In other words, we want to predict the reamaining time-to-failure (T) of training engines at each possible time-step until the last one where the time-to-failure is 1. The target variable is then a countdown function of the time.
 
-Please pay attention that each subsequence is an individual sample, thus Keras will restart the state of recurrent cells at the end of each subsequence even if sequential subsequences may be present in the same batch. This is fundamental in order to build the cumulated latent representations of our engine over time.
+The variable E represents wheter the corresponding T was observed (1) or censored (0).
 
-In this example all of the data is observable, we are not considering censored sequences.
+Please pay attention that each subsequence is an individual sample. Thus, keras will restart the state of recurrent cells at the end of each subsequence even if sequential subsequences may be present in the same batch. This is fundamental in order to build the cumulated latent representations of our engine state over time.
+
+### Training with censored data
+
+In the notebook example all of the data is observable (E=1) and we are not considering censored sequences.
+If you would like to extend it to include censored observations, you should pick a point in time t_current (e.g. 200) and filter out all of the observations in the training set that are earlier than the representative current time. 
+The new target variables (T', E') for training will be:
+
+ - T' = min(T, t_current)
+ - E' = if T <= t_current 1 else 0
+
+You could leave the test target as is so that you can compare how your test accuracy changes when training with censored data as function of the t_current, aka. what is the effect (Bias error Vs. Variance error) when the fraction of censored observations increases.
 
 ### Architecture
 
-We use a single recurrent layer made of 20 GRU followed by a dense output layer of dimensionality 2 with a custom activation layer (alpha and beta output values).
+We used a single recurrent layer made of 20 GRU followed by a dense output layer of dimensionality 2 with a custom activation layer (alpha and beta output values).
 
 ![img](images/model-architecture.png)
+
+The activation layer is a custom function that the author of wttt-rnn set to an exponential function for alpha and a sigmoid function between 0 and beta_max for parameter beta.
+The rationale is that alpha should always be greater or equal than 1 and beta should be between 0+ (high confidence) and a maximum value beta_max that act as both regularizer and stabilizer.
 
 The tuning parameters are:
  - GRU with activation='tanh', recurrent_dropout=0.25, dropout=0.3
@@ -134,7 +154,7 @@ If we look at the distribution of T in the test set and the mean of Weibull para
 ![img](images/average-test-T-distribution.png)
  As expected we can see the mean Weibull distribution overlaps the true distribution.
  
- If we try to plot all of the Weibull distributions of each of the 100 engines in the test set and marking with a dot the corresponding true value we can see that most of the true values are close to the mode of the distribution:
+ If we try to plot all of the Weibull distributions of each of the 100 engines in the test set and marking with a dot the corresponding true value we can see that most of the true values are close to the mode of the distribution (each color represents a different engine):
  
 ![img](images/weibull-distribution-test-engines.png)
  
@@ -160,7 +180,7 @@ The nice result is that the residual error has almost zero mean, aka. unbiased p
 
 Nevertheless, treating the Weibull distribution as a single prediction means losing all of its probabilistic charme. Thus, it is more advisable to reason about your time-to-failure in probabilistic terms or at least to provide some confidence intervals.
 
-If, instead, we pick the engine number 3 from the test set and predict all of its sub-sequences, we can see the evolution of the predicted time-to-failure distributions at each time step (blu is the beginning and red is the end of the sequence):
+If, instead, we pick the engine number 3 from the test set and predict all of its sub-sequences (from 1 to the latest observation), we can see the evolution of the predicted time-to-failure distributions at each time step (blu is the beginning and red is the end of the sequence):
 
 ![img](images/weibull-distribution-test-engine-3.png)
 
