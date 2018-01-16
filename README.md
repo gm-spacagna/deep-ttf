@@ -113,7 +113,7 @@ After have trained for 100 epochs with a batch size of 128 we can plot the loss 
 
 Surprisingly the loss function on the test data is lower than the training one. Axctually, this is an expected results because the training set contains all of the subsequences of any length while the test set contains only middle length sequences. The accuracy on very short sentences is clearly much lower, thus the training data is penalized.
 
-We can also observe that the best stop point we would have achieved with early stopping is around 40 epochs.
+We can also observe that the best stop point we would have achieved with early stopping is around 30 epochs.
 
 By looking into the bias terms and weights of the output layer we can see the evolutions of the alpha and beta parameters:
 
