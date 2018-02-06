@@ -1,5 +1,5 @@
 # Deep Time-to-Failure
-A tutorial on how to implement an algoritm for predictive mainteinance using survival analysis theory and gated Recurrent Neural Networks in Keras.
+A tutorial on how to implement an algorithm for predictive maintenance using survival analysis theory and gated Recurrent Neural Networks in Keras.
 
 The tutorial is divided into:
 1. Fitting survival distributions and regression survival models using lifelines.
