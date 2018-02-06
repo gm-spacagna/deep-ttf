@@ -1,5 +1,5 @@
 # Deep Time-to-Failure
-Predicting survival functions and remaining time-to-failure using statistical techniques and Recurrent Neural Networks in Python.
+A tutorial on how to implement an algoritm for predictive mainteinance using survival analysis theory and gated Recurrent Neural Networks in Keras.
 
 The tutorial is divided into:
 1. Fitting survival distributions and regression survival models using lifelines.
