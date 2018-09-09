@@ -98,7 +98,7 @@ Please pay attention that each subsequence is an individual sample. Thus, keras 
 ### Training with censored data
 
 In the notebook example all of the data is observable (E=1) and we are not considering censored sequences.
-If you would like to extend it to include censored observations, you should pick a point in time t_current (e.g. 200) and filter out all of the observations in the training set that are earlier than the representative current time. 
+If you would like to extend it to include censored observations, you should pick a point in time t_current (e.g. 200) and filter out all of the observations in the training set that are later than the representative current time. 
 The new target variables (T', E') for training will be:
 
  - T' = min(T, t_current)
@@ -118,7 +118,7 @@ The rationale is that alpha should always be greater or equal than 1 and beta sh
 The tuning parameters are:
  - GRU with activation='tanh', recurrent_dropout=0.25, dropout=0.3
  - Adam optimizer with lr=.01, clipnorm=1
- 
+
 ### Debugging nan weights
 
 In general nan weights happen when the data is not properly scaled or normalized or if beta values are too large. In the latter case I recommend to downscale the values of time steps in case you are not using multiples of 1. Try to use shorter sequences such that the maximum beta parameters does not exceed 500.
@@ -153,17 +153,17 @@ If we look at the distribution of T in the test set and the mean of Weibull para
 
 ![img](images/average-test-T-distribution.png)
  As expected we can see the mean Weibull distribution overlaps the true distribution.
- 
+
  If we try to plot all of the Weibull distributions of each of the 100 engines in the test set and marking with a dot the corresponding true value we can see that most of the true values are close to the mode of the distribution (each color represents a different engine):
- 
+
 ![img](images/weibull-distribution-test-engines.png)
- 
+
 It is interesting to observe the patterns and correlations of alpha and beta by looking at the 2-D density plot of the two parameters:
 
 ![img](images/params-density-test.png)
 
 When alpha is really small (below 25) the model is very confident (low betas). As alpha increases (we are far from the failure event), also beta does (our level of confidence is low).
- 
+
 If we woul like to treat this problem as a regression we could use the mode, or alternatively the expected value (mean), of the distribution and compare the error in time.
 We can make a regression scatter plot showing the predicted value Vs. the true target:
 
@@ -176,7 +176,7 @@ The distribution of residual error will look like:
 ![img](images/regression_error_test.png)
 
 It looks like the result of a GLM (Generalized Linear Model) regression where the residuals belong to a family of non Normal distributions.
-The nice result is that the residual error has almost zero mean, aka. unbiased predictions. 
+The nice result is that the residual error has almost zero mean, aka. unbiased predictions.
 
 Nevertheless, treating the Weibull distribution as a single prediction means losing all of its probabilistic charme. Thus, it is more advisable to reason about your time-to-failure in probabilistic terms or at least to provide some confidence intervals.
 
@@ -190,7 +190,7 @@ If we plot the predictions at each time step of engine 3 in terms of mode and [1
 
 ![img](images/prediction-over-time-engine-3.png)
 
-This is a very powerful resource to take into account into predictive modeling: you can decide what risk you want to take on predicting early failures Vs. too-late detections. 
+This is a very powerful resource to take into account into predictive modeling: you can decide what risk you want to take on predicting early failures Vs. too-late detections.
 
 # References
 
